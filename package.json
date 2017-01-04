@@ -1,0 +1,24 @@
+{
+  "name": "api-missas",
+  "description": "API para consulta dos eventos e das missas da Paróquia São Pedro de Baixo Guandu",
+  "author": "davidalves1s <alves.david@outlook.com>",
+  "main": "server.js",
+  "scripts": {
+    "api": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidalves1/api-eventos.git"
+  },
+  "keywords": [
+    "node",
+    "mongodb",
+    "express"
+  ],
+  "license": "MIT"
+}
