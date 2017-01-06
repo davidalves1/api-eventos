@@ -1,36 +1,52 @@
 // Datepicker
-var date = document.querySelector('#flatpickr');
+var date = document.querySelector('.flatpickr');
 date.flatpickr({
+	locale: 'pt',
+	enableTime: true,
+	altInput: true,
+	altFormat: 'd/m/Y - H:i',
 	utc: true,
-	enableTime: true
+	time_24hr: true,
+	wrap: true,
+	clickOpens: false
 });
 
-var ajax = function(url, method, data) { 
+var ajax = function(url, method, callback, data) { 
 	var xhr = new XMLHttpRequest();
 
 	var xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onload = function (e) {
-		if (xhr.readyState === 4 && xhr.status === 200) {
-			console.log(xhr.responseText);
-		} else {
-			console.error(xhr.statusText);
+		if (xhr.readyState === 4) {
+			callback({
+				status: xhr.status,
+				response: xhr.responseText
+			});
 		}
-	}
+	};
 
 	xhr.onerror = function (e) {
-		console.error(xhr.statusText);
+		callback({
+			status: xhr.statusText,
+			response: xhr.statusText
+		});
 	};
+
 	xhr.send(data);
 };
 
-var btnCadastro = document.querySelector('#btnCadastro');
+function handleResponse(obj) {
+	console.log(obj);
+}
 
-btnCadastro.addEventListener('click', function() {
+var btnCadastrar = document.querySelector('#btnCadastrar');
+
+btnCadastrar.addEventListener('click', function() {
 	var date_time = document.querySelector('#flatpickr').value;
 	var descricao = document.querySelector('#descricao').value;
 
+	console.log(date_time);
 	var data = {
 		date: new Date(date_time),
 		description: descricao
@@ -39,6 +55,12 @@ btnCadastro.addEventListener('click', function() {
 	if (date_time === '' || descricao === '')
 		return alert('Preencha todos os campos para cadastrar!');
 
-	console.log(JSON.stringify(data));
-	// ajax('http://localhost:5000/api/missas', 'POST', JSON.stringify(data));	
+	// console.log(JSON.stringify(data));
+	// ajax('http://localhost:5000/api/eventos', 'POST', handleResponse, JSON.stringify(data));
+});
+
+var btnExibir = document.querySelector('#btnExibir');
+
+btnExibir.addEventListener('click', function() {
+	ajax('http://localhost:5000/api/eventos', 'GET', handleResponse, {});
 });

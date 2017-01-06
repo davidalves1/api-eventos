@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const MissaSchema = new Schema({
+const EventoSchema = new Schema({
     date: Date,
     description: String
 });
 
-module.exports = mongoose.model('Missa', MissaSchema);
+module.exports = mongoose.model('Evento', EventoSchema);

@@ -10,10 +10,9 @@ body {
 	font-family: Tahoma, Arial, sans-serif;
 }
 
-button {
+.button {
 	margin-top: 20px;
 	height: 35px;
-	/*width: 60px;*/
 	color: #FFFFFF;
 	background-color: #45B24A;
 	border: 0 solid;
@@ -21,7 +20,7 @@ button {
 	font-weight: bold;
 }
 
-button:hover {
+.button:hover {
 	background-color: #3D9D41;
 	transition: 0.3s;
 }
@@ -29,7 +28,7 @@ button:hover {
 .container {
 	text-align: center;
 	display: table-cell;
-	vertical-align: middle;
+	/*vertical-align: middle;*/
 }
 
 .content {
@@ -50,18 +49,6 @@ h1 {
 	border-radius: 5px;
 	text-align: center;
 	font-size: 14px;
-}
-
-textarea {
-	margin-top: 10px;
-	border: 1px solid #BABABA;
-	border-radius: 5px;
-	text-align: justify;
-	min-width: 450px;
-	min-height: 300px;
-	font-family: Tahoma, Arial, sans-serif;
-	font-size: 12px;
-	padding: 10px;
 }
 
 .mtop-20 {

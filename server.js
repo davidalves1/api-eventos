@@ -4,11 +4,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Missa = require('./server/models/Missas');
+const Evento = require('./server/models/eventos');
 
 const app = express();
 
-mongoose.connect('mongodb://user:user123@ds149998.mlab.com:49998/db-missas');
+mongoose.connect('mongodb://user:user123@ds157078.mlab.com:57078/db-eventos');
 
 // Configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -38,16 +38,16 @@ router.get('/', function(req, res) {
 });
 
 // Routes from the API
-router.route('/missas')
-    // create a missa
+router.route('/eventos')
+    // create a evento
     .post(function(req, res) {
         
-        let missa = new Missa;      // create a new instance of the missa model
-        missa.date = req.body.date;  // set the missas date (comes from the request)
-        missa.description = req.body.description;  // set the missas descríption (comes from the request)
+        let evento = new Evento;      // create a new instance of the evento model
+        evento.date = req.body.date;  // set the eventos date (comes from the request)
+        evento.description = req.body.description;  // set the eventos descríption (comes from the request)
 
-        // save the missa and check for errors
-        missa.save(function(err) {
+        // save the evento and check for errors
+        evento.save(function(err) {
             if (err)
                 res.send(err);
 
@@ -56,51 +56,51 @@ router.route('/missas')
         
     })
 
-    // get all the missas
+    // get all the eventos
     .get(function(req, res) {
-        Missa.find(function(err, missas) {
+        Evento.find(function(err, eventos) {
             if (err)
                 res.send(err);
 
-            res.json(missas);
+            res.json(eventos);
         })
         .sort('-date description');
     });
 
-router.route('/missas/:missa_id')
-    // get one missa
+router.route('/eventos/:evento_id')
+    // get one evento
     .get(function(req, res){
-        Missa.findById(req.params.missa_id, function(err, missa) {
+        Evento.findById(req.params.evento_id, function(err, evento) {
             if (err)
                 res.send(err);
 
-            res.json(missa);
+            res.json(evento);
         });
     })
-    // update a missa
+    // update a evento
     .put(function(req, res) {
-        Missa.findById(req.params.missa_id, function(err, missa) {
+        Evento.findById(req.params.evento_id, function(err, evento) {
             if (err)
                 res.send(err);
 
-            missa.date = req.body.date;
-            missa.description = req.body.description;
+            evento.date = req.body.date;
+            evento.description = req.body.description;
 
-            missa.save(function(err) {
+            evento.save(function(err) {
 
                 if (err)
                     res.send(err);
 
-                res.json({message: 'Tarefa atualizada'});
+                res.json({message: 'Evento atualizada'});
 
             });
         });
     })
-    // delete a missa
+    // delete a evento
     .delete(function(req, res) {
-        Missa.remove({
-            _id: req.params.missa_id
-        }, function(err, missa) {
+        Evento.remove({
+            _id: req.params.evento_id
+        }, function(err, evento) {
             if (err)
                 res.send(err);
 
