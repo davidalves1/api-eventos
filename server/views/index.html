@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Cadastro de Eventos</title>
+	<link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+	<!-- <link rel="stylesheet" href="../../src/style.css"> -->
+	<style>
+		html, body {
+			height: 100%;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			display: table;
+			font-family: Tahoma, Arial, sans-serif;
+		}
+
+		.button {
+			margin-top: 20px;
+			height: 35px;
+			color: #FFFFFF;
+			background-color: #45B24A;
+			border: 0 solid;
+			border-radius: 5px;
+			font-weight: bold;
+		}
+
+		.button:hover {
+			background-color: #3D9D41;
+			transition: 0.3s;
+		}
+
+		.container {
+			text-align: center;
+			display: table-cell;
+			/*vertical-align: middle;*/
+		}
+
+		.content {
+			text-align: center;
+			display: inline-block;
+		}
+
+		h1 {
+			font-weight: 100;
+			font-family: 'Lato', sans-serif;
+			font-size: 48px; 
+		}
+
+		.input-text {
+			height: 30px;
+			min-width: 400px;
+			border: 1px solid #BABABA;
+			border-radius: 5px;
+			text-align: center;
+			font-size: 14px;
+		}
+
+		.mtop-20 {
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="content">
+			<h1>Cadastro de Eventos</h1>
+
+			<p class="flatpickr">
+				<label>Data/Hora</label>
+				<input class="input-text" placeholder="Data e hora do evento" data-input>
+				<br>
+				<button class="mtop-20" data-open>Selecione a data</button>
+				<button class="mtop-20" data-close>X</button>
+			</p>
+<!-- 			<label for="flatpickr">Data/Hora</label> 
+			<input type="text" id="flatpickr" class="input-text"> -->
+			<br>
+			<label for="descricao">Descrição</label>
+			<input type="text" id="descricao" class="input-text mtop-20">
+			<br>
+			<button id="btnCadastrar" class="button">Cadastrar</button>
+			<button id="btnExibir" class="button">Exibir Eventos</button>
+			<br>
+			<div id="lista_eventos"></div>
+		</div>
+	</div>
+	<script src="https://unpkg.com/flatpickr"></script>
+	<script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
+	<script>
+		// Datepicker
+		var date = document.querySelector('.flatpickr');
+		date.flatpickr({
+			locale: 'pt',
+			enableTime: true,
+			altInput: true,
+			altFormat: 'd/m/Y - H:i',
+			utc: true,
+			time_24hr: true,
+			wrap: true,
+			clickOpens: false
+		});
+
+		var ajax = function(url, method, callback, data) { 
+			var xhr = new XMLHttpRequest();
+
+			var xhr = new XMLHttpRequest();
+			xhr.open(method, url, true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function (e) {
+				if (xhr.readyState === 4) {
+					callback({
+						status: xhr.status,
+						response: xhr.responseText
+					});
+				}
+			};
+
+			xhr.onerror = function (e) {
+				callback({
+					status: xhr.statusText,
+					response: xhr.statusText
+				});
+			};
+
+			xhr.send(data);
+		};
+
+		function handleResponse(obj) {
+			console.log(obj);
+		}
+
+		var btnCadastrar = document.querySelector('#btnCadastrar');
+
+		btnCadastrar.addEventListener('click', function() {
+			var date_time = document.querySelector('#flatpickr').value;
+			var descricao = document.querySelector('#descricao').value;
+
+			console.log(date_time);
+			var data = {
+				date: new Date(date_time),
+				description: descricao
+			};
+
+			if (date_time === '' || descricao === '')
+				return alert('Preencha todos os campos para cadastrar!');
+
+			// console.log(JSON.stringify(data));
+			// ajax('http://localhost:5000/api/eventos', 'POST', handleResponse, JSON.stringify(data));
+		});
+
+		var btnExibir = document.querySelector('#btnExibir');
+
+		btnExibir.addEventListener('click', function() {
+			ajax('http://localhost:5000/api/eventos', 'GET', handleResponse, {});
+		});
+	</script>
+</body>
+</html>

@@ -4,6 +4,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
 const Evento = require('./server/models/eventos');
 
 const app = express();
@@ -34,11 +35,11 @@ router.use((req, res, next) => {
 });
 
 router.get('/', function(req, res) {
-    res.json({ message: 'Bem vindo a API!' });   
+    res.sendFile(path.join(__dirname+'/server/views/index.html'));
 });
 
 // Routes from the API
-router.route('/eventos')
+router.route('/api/eventos')
     // create a evento
     .post(function(req, res) {
         
@@ -67,7 +68,7 @@ router.route('/eventos')
         .sort('-date description');
     });
 
-router.route('/eventos/:evento_id')
+router.route('/api/eventos/:evento_id')
     // get one evento
     .get(function(req, res){
         Evento.findById(req.params.evento_id, function(err, evento) {
@@ -91,7 +92,7 @@ router.route('/eventos/:evento_id')
                 if (err)
                     res.send(err);
 
-                res.json({message: 'Evento atualizada'});
+                res.json({message: 'Evento atualizado'});
 
             });
         });
@@ -109,8 +110,8 @@ router.route('/eventos/:evento_id')
     });
 
 // REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/api', router);
+// all of our routes will be prefixed with /
+app.use('/', router);
 
 // START THE SERVER
 // =============================================================================
