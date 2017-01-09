@@ -1,4 +1,4 @@
-# api-missas
+# api-eventos
 
 > API para consulta dos horários dos eventos e das missas da Paróquia São Pedro de Baixo Guandu
 
