@@ -13,8 +13,7 @@ date.flatpickr({
 
 var ajax = function(url, method, callback, data) { 
 	var xhr = new XMLHttpRequest();
-
-	var xhr = new XMLHttpRequest();
+	
 	xhr.open(method, url, true);
 	xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.onload = function (e) {

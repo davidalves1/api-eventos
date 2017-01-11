@@ -70,11 +70,11 @@
 			<h1>Cadastro de Eventos</h1>
 
 			<p class="flatpickr">
-				<label>Data/Hora</label>
-				<input class="input-text" placeholder="Data e hora do evento" data-input>
+				<button data-open>Selecionar data</button>
+				<button data-close>X</button>
 				<br>
-				<button class="mtop-20" data-open>Selecione a data</button>
-				<button class="mtop-20" data-close>X</button>
+				<label>Data/Hora</label>
+				<input id="date_time" class="input-text mtop-20" placeholder="Data e hora do evento" data-input>
 			</p>
 <!-- 			<label for="flatpickr">Data/Hora</label> 
 			<input type="text" id="flatpickr" class="input-text"> -->
@@ -98,7 +98,6 @@
 			enableTime: true,
 			altInput: true,
 			altFormat: 'd/m/Y - H:i',
-			utc: true,
 			time_24hr: true,
 			wrap: true,
 			clickOpens: false
@@ -135,9 +134,8 @@
 		var btnCadastrar = document.querySelector('#btnCadastrar');
 
 		btnCadastrar.addEventListener('click', function() {
-			var date_time = document.querySelector('#flatpickr').value;
+			var date_time = document.querySelector('#date_time').value;
 			var descricao = document.querySelector('#descricao').value;
-
 			console.log(date_time);
 			var data = {
 				date: new Date(date_time),
@@ -147,14 +145,17 @@
 			if (date_time === '' || descricao === '')
 				return alert('Preencha todos os campos para cadastrar!');
 
-			// console.log(JSON.stringify(data));
-			// ajax('http://localhost:5000/api/eventos', 'POST', handleResponse, JSON.stringify(data));
+			console.log(JSON.stringify(data));
+			ajax('http://localhost:5000/api/eventos', 'POST', handleResponse, JSON.stringify(data));
+
+			date_time = '';
+			descricao = '';
 		});
 
 		var btnExibir = document.querySelector('#btnExibir');
 
 		btnExibir.addEventListener('click', function() {
-			ajax('http://localhost:5000/api/eventos', 'GET', handleResponse, {});
+			ajax('http://localhost:5000/api/eventos/error', 'GET', handleResponse, {});
 		});
 	</script>
 </body>
