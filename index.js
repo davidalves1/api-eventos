@@ -1,28 +1,22 @@
-// BASE SETUP
-// =============================================================================
-
 const express = require('express');
+const router = express.Router();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-const Evento = require('./server/models/eventos');
+const Evento = require('./app/models/Eventos');
+require('dotenv').config();
 
 const app = express();
 
-mongoose.connect('mongodb://user:user123@ds157078.mlab.com:57078/db-eventos');
+const url = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds157078.mlab.com:57078/db-eventos`;
+mongoose.connect(url);
 
-// Configure app to use bodyParser()
-// this will let us get the data from a POST
+// bodyParser() this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Set a port
+// Set a port              
 const port = process.env.PORT || 5000;
-
-// ROUTES FOR OUR API
-// =============================================================================
-// get an instance of the express Router
-const router = express.Router();              
 
 router.use((req, res, next) => {
 	// Resolve the cross-origin problem
@@ -40,7 +34,7 @@ router.get('/', function(req, res) {
 
 // Routes from the API
 router.route('/api/eventos')
-    // create a evento
+    // create a event
     .post(function(req, res) {
         
         let evento = new Evento;      // create a new instance of the evento model
@@ -50,39 +44,40 @@ router.route('/api/eventos')
         // save the evento and check for errors
         evento.save(function(err) {
             if (err)
-                res.send(err);
+                res.json({status: 500, error: err});
 
             res.json({ message: 'Registro adicionado com sucesso' });
         });
         
     })
 
-    // get all the eventos
+    // get all events
     .get(function(req, res) {
         Evento.find(function(err, eventos) {
             if (err)
-                res.send(err);
+                res.json({status: 500, error: err});
 
             res.json(eventos);
         })
         .sort('-date description');
     });
 
-router.route('/api/eventos/:evento_id')
-    // get one evento
+router.route('/api/eventos/:event_id')
+    // get a event
     .get(function(req, res){
         Evento.findById(req.params.evento_id, function(err, evento) {
             if (err)
-                res.send(err);
+                res.json({status: 500, error: err});
 
             res.json(evento);
         });
     })
-    // update a evento
+
+    // update a event
     .put(function(req, res) {
         Evento.findById(req.params.evento_id, function(err, evento) {
             if (err)
-                res.send(err);
+                res.json({status: 500, error: err});
 
             evento.date = req.body.date;
             evento.description = req.body.description;
@@ -90,30 +85,40 @@ router.route('/api/eventos/:evento_id')
             evento.save(function(err) {
 
                 if (err)
-                    res.send(err);
+                    res.json({status: 500, error: err});
 
-                res.json({message: 'Evento atualizado'});
+                res.json({message: 'Evento atualizado', status: 200});
 
             });
         });
     })
-    // delete a evento
+
+    // delete a event
     .delete(function(req, res) {
         Evento.remove({
             _id: req.params.evento_id
         }, function(err, evento) {
             if (err)
-                res.send(err);
+                res.json({deleted: false, status: 500, error: err});
 
             res.json({deleted: true, status: 200})
         })
     });
 
-// REGISTER OUR ROUTES -------------------------------
+router.get('/api/event/date/:date', function(req, res) {
+    Evento.find({
+        date: {$gte: req.params.date}
+    },
+    function(err, eventos) {
+        if (err)
+            res.json({status: 500, error: err});
+
+        res.json(eventos);
+    });
+});
+
 // all of our routes will be prefixed with /
 app.use('/', router);
 
-// START THE SERVER
-// =============================================================================
 app.listen(port);
 console.log(`Magic happens on port on localhost:${port}/api`);
