@@ -2,7 +2,7 @@ module.exports = app => {
 	app.route('/api/eventos/:event_id')
     // get a event
 	    .get(function(req, res){
-	        Evento.findById(req.params.evento_id, function(err, evento) {
+	        Evento.findById(req.params.event_id, function(err, evento) {
 	            if (err)
 	                res.json({status: 500, error: err});
 
@@ -12,7 +12,7 @@ module.exports = app => {
 
 	    // update a event
 	    .put(function(req, res) {
-	        Evento.findById(req.params.evento_id, function(err, evento) {
+	        Evento.findById(req.params.event_id, function(err, evento) {
 	            if (err)
 	                res.json({status: 500, error: err});
 
@@ -33,7 +33,7 @@ module.exports = app => {
 	    // delete a event
 	    .delete(function(req, res) {
 	        Evento.remove({
-	            _id: req.params.evento_id
+	            _id: req.params.event_id
 	        }, function(err, evento) {
 	            if (err)
 	                res.json({deleted: false, status: 500, error: err});
