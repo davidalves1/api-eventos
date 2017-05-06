@@ -1,18 +1,35 @@
 {
-  "name": "api-eventos-psp",
+  "name": "api-eventos-pspbg",
   "version": "1.0.0",
   "description": "API para consulta dos eventos da Paróquia São Pedro de Baixo Guandu",
   "main": "server.js",
-  "scripts": {
-    "dev": "nodemon server.js"
-  },
-  "author": "davidalves1 <alves.david@outlook.com>",
-  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.17.1",
     "dotenv": "^4.0.0",
     "express": "^4.15.2",
     "express-validator": "^3.2.0",
     "mongodb": "^2.2.26"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidalves1/api-eventos-pspbg.git"
+  },
+  "keywords": [
+    "api",
+    "node",
+    "express",
+    "mongodb"
+  ],
+  "author": "davidalves1 <alves.david@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davidalves1/api-eventos-pspbg/issues"
+  },
+  "homepage": "https://github.com/davidalves1/api-eventos-pspbg#readme"
 }
