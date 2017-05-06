@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 1337;
 
 MongoClient.connect(db.url, (err, database) => {
 
@@ -28,7 +28,7 @@ MongoClient.connect(db.url, (err, database) => {
 
 	require('./app/routes')(app, database);
 
-	app.listen(port, () => {
-		console.log(`The magic happens in port ${port}`);
-	});
+	app.listen(port);
+
+	console.log(`The magic happens on port ${port}`);
 });
