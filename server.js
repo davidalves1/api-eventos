@@ -1,12 +1,10 @@
-'use strict';
-
 const express = require('express');
-const consign = require('consign');
+const MongoClient = require('mongodb').MongoClient;
+const bodyParser = require('body-parser');
+const db = require('./config/db')
+
 const app = express();
 
-const bodyParser = require('body-parser');
-
-// bodyParser() this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -15,15 +13,20 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-	console.log(`method: ${req.method} | url: ${req.url}`);
+	// console.log(`method: ${req.method} | url: ${req.url}`);
 
 	next();
 });
 
-consign()
-    .include('app/routes')
-    .then('config/db_connection.js')
-    .then('app/models')
-    .into(app);
+const port = process.env.PORT || 5000;
 
-module.exports = app;
+MongoClient.connect(db.url, (err, database) => {
+
+	if (err) return console.log(err);
+
+	require('./app/routes')(app, database);
+
+	app.listen(port, () => {
+		console.log(`The magic happens in port ${port}`);
+	});
+});

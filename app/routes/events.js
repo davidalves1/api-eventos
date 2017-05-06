@@ -1,34 +1,57 @@
-module.exports = app => {
+module.exports = (app, db) => {
+	/**
+	 * The Create resource method
+	 * @param  '/api/events' The route to call this method
+	 */
+	app.post('/api/events', (req, res) => {
 
-	const Evento = app.app;
+		const date_time = req.body.date || undefined;
+		const description = req.body.description || undefined;
 
-	// Routes from the API
-	app.route('/api/eventos')
-	    // create a event
-	    .post(function(req, res) {
-	        
-	        let evento = new Evento;      // create a new instance of the evento model
-	        evento.date = req.body.date;  // set the eventos date (comes from the request)
-	        evento.description = req.body.description;  // set the eventos descríption (comes from the request)
+		if (date_time === undefined || description === undefined)
+			return res.status(422).json({error: 'Data e descrição são obrigatórias'});
 
-	        // save the evento and check for errors
-	        evento.save(function(err) {
-	            if (err)
-	                res.json({status: 500, error: err});
+		const event = {
+			date: new Date(date_time),
+			description: description
+		};
 
-	            res.json({ message: 'Registro adicionado com sucesso' });
-	        });
-	        
-	    })
+		db.collection('eventos').insert(event, (err, result) => {
+			if (err) {
+				console.log(err);
+				return res.status(500).json({error: `An error has occured.`});
+			}
+				
+			return res.json({message: 'Evento adicionado com sucesso'});
 
-	    // get all events
-	    .get(function(req, res) {
-	        Evento.find(function(err, eventos) {
-	            if (err)
-	                res.json({status: 500, error: err});
+		});
+	});
 
-	            res.json(eventos);
-	        })
-	        .sort('-date description');
-	    });
-}
+	app.get('/api/events/:date', (req, res) => {
+
+		const date = req.params.date || undefined;
+
+		if (date === undefined)
+			return res.status(422).json({error: 'Nenhuma data foi informaada'});
+
+
+		// Como podem ter eventos e diferentes horas do mesmo dia é definido o período: 0h do dia <= H < 0h do dia seguinte
+		const start = new Date(date);
+		let end = new Date(date);
+		end.setDate(start.getDate() + 1);
+
+		console.log(start, end)
+
+		db.collection('eventos').find({'date': {$gte: start, $lt: end}})
+			.toArray((err, events) => {
+				if (err) {
+					console.log(err);
+					res.status(500).json({error: `An error has occured.`});
+				}
+
+				return res.send(events);
+
+			});
+	});
+
+};
