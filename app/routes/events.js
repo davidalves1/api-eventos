@@ -3,7 +3,7 @@ module.exports = (app, db) => {
 	 * The Create resource method
 	 * @param  '/api/events' The route to call this method
 	 */
-	app.post('/api/events', (req, res) => {
+	app.post('/v1/events', (req, res) => {
 
 		const date_time = req.body.date || undefined;
 		const description = req.body.description || undefined;
@@ -27,7 +27,7 @@ module.exports = (app, db) => {
 		});
 	});
 
-	app.get('/api/events/:date', (req, res) => {
+	app.get('/v1/events/:date', (req, res) => {
 
 		const date = req.params.date || undefined;
 
