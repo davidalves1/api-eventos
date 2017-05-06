@@ -27,6 +27,9 @@
     "mongodb"
   ],
   "author": "davidalves1 <alves.david@outlook.com>",
+  "engines": {
+    "node": ">=6.9.1"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/davidalves1/api-eventos-pspbg/issues"
