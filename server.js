@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-const port = process.env.PORT || 1337;
+const port = process.env.PORT || 3000;
 
 MongoClient.connect(db.url, (err, database) => {
 
